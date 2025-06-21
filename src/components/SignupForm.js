@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 export default function SignupForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -10,8 +12,9 @@ export default function SignupForm() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+
     try {
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
+      const res = await fetch(`${API_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -21,50 +24,50 @@ export default function SignupForm() {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.message || "Signup failed");
-      }
+      if (!res.ok) throw new Error(data.message || "Signup failed");
 
-      localStorage.setItem("token", data.token);
-      toast.success("Signup successful!");
-      navigate("/dashboard");
+      toast.success("Signup successful! Please login.");
+      navigate("/login");
     } catch (err) {
-      console.error(err.message);
       toast.error(err.message);
     }
   };
 
   return (
     <div className="max-w-md mx-auto p-4">
-      <h2 className="text-xl font-bold mb-4">Sign Up</h2>
+      <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
+
       <form onSubmit={handleSignup} className="space-y-3">
         <input
           type="text"
           placeholder="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full p-2 border rounded"
           required
+          className="w-full p-2 border rounded"
         />
+
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border rounded"
           required
+          className="w-full p-2 border rounded"
         />
+
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border rounded"
           required
+          className="w-full p-2 border rounded"
         />
+
         <button
           type="submit"
-          className="w-full bg-green-500 text-white p-2 rounded hover:bg-green-600"
+          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
         >
           Sign Up
         </button>
