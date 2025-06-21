@@ -9,7 +9,7 @@ export default function DashboardSummary() {
     const fetchEntries = async () => {
       const token = localStorage.getItem("token");
       try {
-        const res = await fetch("http://localhost:5000/api/diet", {
+        const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/diet`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
