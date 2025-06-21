@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const API_URL = process.env.REACT_APP_API_URL;
-
 export default function AddDietEntryForm() {
   const [foodItem, setFoodItem] = useState("");
   const [calories, setCalories] = useState("");
@@ -15,12 +13,12 @@ export default function AddDietEntryForm() {
 
     const token = localStorage.getItem("token");
     if (!token) {
-      toast.error("Please login first.");
+      toast.error("You must be logged in.");
       return;
     }
 
     try {
-      const res = await fetch(`${API_URL}/api/diet/add`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -30,11 +28,15 @@ export default function AddDietEntryForm() {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || "Failed to add entry.");
 
-      toast.success("Diet entry added successfully!");
+      if (!res.ok) {
+        throw new Error(data.message || "Failed to add entry");
+      }
+
+      toast.success("Diet entry added!");
       navigate("/view-diet-entries");
     } catch (err) {
+      console.error(err.message);
       toast.error(err.message);
     }
   };
@@ -42,7 +44,6 @@ export default function AddDietEntryForm() {
   return (
     <div className="max-w-md mx-auto p-4">
       <h2 className="text-xl font-bold mb-4">Add Diet Entry</h2>
-
       <form onSubmit={handleSubmit} className="space-y-3">
         <input
           type="text"
@@ -52,7 +53,6 @@ export default function AddDietEntryForm() {
           required
           className="w-full p-2 border rounded"
         />
-
         <input
           type="number"
           placeholder="Calories"
@@ -61,19 +61,17 @@ export default function AddDietEntryForm() {
           required
           className="w-full p-2 border rounded"
         />
-
         <input
           type="number"
-          placeholder="Protein (g)"
+          placeholder="Protein"
           value={protein}
           onChange={(e) => setProtein(e.target.value)}
           required
           className="w-full p-2 border rounded"
         />
-
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
+          className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
         >
           Add Entry
         </button>
