@@ -18,7 +18,7 @@ export default function AddDietEntryForm() {
     }
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/add`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/diet/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
